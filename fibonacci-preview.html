@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibonacci Retracement Preview | Dexter FX</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #5b2d8e 0%, #4a2270 100%);
+            --fib-gold: #ffc107;
+            --fib-blue: #007bff;
+            --fib-green: #28a745;
+            --fib-red: #dc3545;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .fib-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+
+        .fib-header {
+            background: var(--primary-gradient);
+            padding: 24px;
+            color: white;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .fib-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .fib-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            height: 650px;
+        }
+
+        .chart-area {
+            background: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .config-area {
+            background: #fff;
+            border-left: 1px solid #eee;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .fib-level-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .level-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .level-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #5b2d8e; }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .fib-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .fib-label {
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: -10px;
+        }
+
+        .price-candle {
+            position: absolute;
+            width: 12px;
+            background: #4caf50;
+            border-radius: 2px;
+        }
+
+        .price-wick {
+            position: absolute;
+            width: 2px;
+            background: #4caf50;
+            left: 5px;
+        }
+
+        .btn-integrate {
+            margin-top: auto;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-integrate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(91, 45, 142, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fib-container">
+        <div class="fib-header">
+            <h1>Fibonacci Retracement Setup</h1>
+            <p>Define automated Fibonacci levels based on recent price structure.</p>
+        </div>
+
+        <div class="fib-content">
+            <div class="chart-area" id="chart-area">
+                <!-- Candles and Fib lines will be injected here -->
+            </div>
+
+            <div class="config-area">
+                <div>
+                    <div class="section-title">Detection Logic</div>
+                    <div class="form-row">
+                        <span class="form-label" style="min-width: 100px;">Lookback</span>
+                        <input type="number" class="form-control" value="100" style="flex:1;">
+                        <span style="font-size: 11px; color: #888;">candles</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label" style="min-width: 100px;">Mode</span>
+                        <select class="form-control" style="flex:1;">
+                            <option>Auto (High/Low)</option>
+                            <option>ZigZag Based</option>
+                            <option>Manual Points</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">Active Levels</div>
+                    <div id="levels-list">
+                        <!-- Levels will be injected here -->
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">Signal Rule</div>
+                    <select class="form-control" style="width: 100%; margin-bottom: 12px;">
+                        <option>Price Retest & Bounce</option>
+                        <option>Price Breakout</option>
+                        <option>Price Touching Level</option>
+                        <option>Level Crossover (Bullish/Bearish)</option>
+                    </select>
+                    <p style="font-size: 11px; color: #666; line-height: 1.4;">
+                        Signals will be triggered when the current price interacts with the enabled Fibonacci levels within the specified lookback.
+                    </p>
+                </div>
+
+                <button class="btn-integrate">Add Fibonacci Rule</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const LEVELS = [
+            { val: 0, name: '0.000 (Low)', color: '#fff', active: true },
+            { val: 0.236, name: '0.236', color: '#ff4d4d', active: true },
+            { val: 0.382, name: '0.382', color: '#ffa64d', active: true },
+            { val: 0.5, name: '0.500 (Mid)', color: '#ffff4d', active: true },
+            { val: 0.618, name: '0.618 (Golden)', color: '#4dff4d', active: true },
+            { val: 0.786, name: '0.786', color: '#4dffff', active: true },
+            { val: 1, name: '1.000 (High)', color: '#fff', active: true }
+        ];
+
+        const chartArea = document.getElementById('chart-area');
+        const levelsList = document.getElementById('levels-list');
+
+        function renderChart() {
+            chartArea.innerHTML = '';
+            
+            // Draw dummy candles (uptrend)
+            const candleCount = 20;
+            const startY = 500;
+            const endY = 150;
+            
+            for (let i = 0; i < candleCount; i++) {
+                const x = 50 + (i * 30);
+                const progress = i / candleCount;
+                const baseHeight = startY - (progress * (startY - endY));
+                const jitter = (Math.random() - 0.5) * 40;
+                const h = 40 + Math.random() * 60;
+                
+                const wick = document.createElement('div');
+                wick.className = 'price-wick';
+                wick.style.left = x + 5 + 'px';
+                wick.style.top = (baseHeight + jitter - 20) + 'px';
+                wick.style.height = (h + 40) + 'px';
+                chartArea.appendChild(wick);
+
+                const candle = document.createElement('div');
+                candle.className = 'price-candle';
+                candle.style.left = x + 'px';
+                candle.style.top = (baseHeight + jitter) + 'px';
+                candle.style.height = h + 'px';
+                chartArea.appendChild(candle);
+            }
+
+            // Draw Fib Lines
+            LEVELS.forEach(lvl => {
+                if (!lvl.active) return;
+                
+                const pos = startY - (lvl.val * (startY - endY));
+                const line = document.createElement('div');
+                line.className = 'fib-line';
+                line.style.top = pos + 'px';
+                line.style.backgroundColor = lvl.color;
+                line.style.opacity = '0.5';
+                
+                line.innerHTML = `<span class="fib-label">${lvl.name}</span>`;
+                chartArea.appendChild(line);
+            });
+        }
+
+        function renderLevels() {
+            levelsList.innerHTML = '';
+            LEVELS.forEach((lvl, idx) => {
+                const row = document.createElement('div');
+                row.className = 'fib-level-row';
+                row.innerHTML = `
+                    <div class="level-info">
+                        <div class="level-color" style="background: ${lvl.color}"></div>
+                        <span class="level-name">${lvl.name}</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" ${lvl.active ? 'checked' : ''} onchange="toggleLevel(${idx})">
+                        <span class="slider"></span>
+                    </label>
+                `;
+                levelsList.appendChild(row);
+            });
+        }
+
+        function toggleLevel(idx) {
+            LEVELS[idx].active = !LEVELS[idx].active;
+            renderChart();
+        }
+
+        renderLevels();
+        renderChart();
+    </script>
+</body>
+</html>

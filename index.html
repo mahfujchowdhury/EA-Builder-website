@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strategy Builder | Dexter FX</title>
+  <meta name="description" content="Create a new automated trading Strategy with Dexter FX Strategy Builder" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="header-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)"
+          stroke-width="1.5" />
+        <path d="M8 22 L13 10 L17 18 L21 12 L26 16" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      Dexter FX
+    </a>
+
+  </header>
+
+  <!-- BODY LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+          <path
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 11h1v6a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-7-7z" />
+        </svg>
+        Home
+      </a>
+
+      <div>
+        <div class="nav-section-label open" id="nav-botbuilder-toggle" onclick="toggleNav('nav-botbuilder')">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="#5b2d8e">
+              <path
+                d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 16v-1a5 5 0 00-10 0v1h10z" />
+            </svg>
+            Settings
+          </span>
+          <span class="toggle-arrow">▶</span>
+        </div>
+        <div class="nav-sub" id="nav-botbuilder">
+          <a href="index.html" class="nav-item active">Create New Strategy</a>
+          <a href="#" class="nav-item">My Strategy</a>
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div>
+        <div class="nav-section-label open" id="nav-manual-toggle" onclick="toggleNav('nav-manual')">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="#666">
+              <path
+                d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+            </svg>
+            Deshboard
+          </span>
+          <span class="toggle-arrow">▶</span>
+        </div>
+        <div class="nav-sub" id="nav-manual">
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div>
+        <div class="nav-section-label open" id="nav-support-toggle" onclick="toggleNav('nav-support')">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="#666">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                clip-rule="evenodd" />
+            </svg>
+            Performance
+          </span>
+          <span class="toggle-arrow">▶</span>
+        </div>
+        <div class="nav-sub" id="nav-support">
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <h1 class="page-title">Create a Strategy</h1>
+
+      <!-- STRATEGY SELECTOR CARD -->
+      <div class="card">
+
+        <!-- Bot Strategy row -->
+        <div class="strategy-row">
+          <span class="row-label">Bot Strategy:</span>
+          <label class="radio-pill selected" id="pill-simple" onclick="selectStrategy('simple')">
+            <input type="radio" name="strategy" value="simple" checked /> Simple
+          </label>
+          <label class="radio-pill" id="pill-grid" onclick="selectStrategy('grid')">
+            <input type="radio" name="strategy" value="grid" /> Grid
+          </label>
+          <label class="radio-pill" id="pill-hedging" onclick="selectStrategy('hedging')">
+            <input type="radio" name="strategy" value="hedging" /> Hedging
+          </label>
+          <label class="radio-pill" id="pill-martingale" onclick="selectStrategy('martingale')">
+            <input type="radio" name="strategy" value="martingale" /> Martingale
+          </label>
+          <label class="radio-pill" id="pill-rangebreakout" onclick="selectStrategy('rangebreakout')">
+            <input type="radio" name="strategy" value="rangebreakout" /> Range Breakout
+          </label>
+        </div>
+
+        <!-- Grid Type row -->
+        <div class="strategy-row hidden" id="row-gridtype">
+          <span class="row-label">Grid Type:</span>
+          <label class="radio-pill selected" id="pill-grid-classic" onclick="selectGridType('classic')">
+            <input type="radio" name="gridtype" value="classic" checked /> Classic Grid
+          </label>
+          <label class="radio-pill" id="pill-grid-reverse" onclick="selectGridType('reverse')">
+            <input type="radio" name="gridtype" value="reverse" /> Reverse Grid
+          </label>
+          <label class="radio-pill" id="pill-grid-hedged" onclick="selectGridType('hedged')">
+            <input type="radio" name="gridtype" value="hedged" /> Hedged Grid
+          </label>
+        </div>
+
+        <!-- Hedging Type row -->
+        <div class="strategy-row hidden" id="row-hedgingtype">
+          <span class="row-label">Hedging Type:</span>
+          <label class="radio-pill selected" id="pill-hedging-recovery" onclick="selectHedgingType('recovery')">
+            <input type="radio" name="hedgingtype" value="recovery" checked /> Recovery Zone Hedging
+          </label>
+          <label class="radio-pill" id="pill-hedging-trendfollowing" onclick="selectHedgingType('trendfollowing')">
+            <input type="radio" name="hedgingtype" value="trendfollowing" /> Trend-Following Hedging
+          </label>
+          <label class="radio-pill" id="pill-hedging-range" onclick="selectHedgingType('range')">
+            <input type="radio" name="hedgingtype" value="range" /> Range Hedging
+          </label>
+        </div>
+
+        <!-- Martingale Type row -->
+        <div class="strategy-row hidden" id="row-martingaletype">
+          <span class="row-label">Martingale Type:</span>
+          <label class="radio-pill selected" id="pill-martingale-classic" onclick="selectMartingaleType('classic')">
+            <input type="radio" name="martingaletype" value="classic" checked /> Classic Martingale
+          </label>
+          <label class="radio-pill" id="pill-martingale-anti" onclick="selectMartingaleType('anti')">
+            <input type="radio" name="martingaletype" value="anti" /> Anti-Martingale
+          </label>
+        </div>
+
+        <!-- Range Breakout Type row -->
+        <div class="strategy-row hidden" id="row-rangebreakouttype">
+          <span class="row-label">Breakout Type:</span>
+          <label class="radio-pill selected" id="pill-rangebreakout-classic"
+            onclick="selectRangeBreakoutType('classic')">
+            <input type="radio" name="rangebreakouttype" value="classic" checked /> Classic Range Breakout
+          </label>
+          <label class="radio-pill" id="pill-rangebreakout-anti" onclick="selectRangeBreakoutType('anti')">
+            <input type="radio" name="rangebreakouttype" value="anti" /> Anti-Range Breakout
+          </label>
+        </div>
+      </div>
+
+      <!-- STEP 1 — rendered by JS -->
+      <div class="card strategy-content" id="step1-card">
+        <div class="step-title" id="step1-title">Step 1: Money Management</div>
+        <div id="step1-body"></div>
+      </div>
+
+      <!-- STEP 2 — rendered by JS -->
+      <div class="card strategy-content" id="step2-card">
+        <div class="step-title" id="step2-title">Step 2: Trade Management</div>
+        <div id="step2-body"></div>
+      </div>
+
+      <!-- STEP 3 — Entry & Exit Rules (Primary) -->
+      <div class="card strategy-content" id="step3-card">
+        <div class="step-title" id="step3-title">Step 3: Entry &amp; Exit Rules</div>
+
+        <!-- Entry Rules -->
+        <div class="rules-box">
+          <div class="rules-box-header">## Entry Rules ##</div>
+          <div class="rules-signal-label">
+            Entry Signals: <span class="help-icon" title="Indicators that trigger entry signals">?</span>
+          </div>
+          <div class="rules-order-row">
+            Authorized Order Types <span class="help-icon" title="Allow only Buy, only Sell, or both">?</span>
+            <label class="radio-opt"><input type="radio" name="ordertype" value="all" checked /> All</label>
+            <label class="radio-opt"><input type="radio" name="ordertype" value="buy" /> Buy</label>
+            <label class="radio-opt"><input type="radio" name="ordertype" value="sell" /> Sell</label>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>BUY &amp; SELL RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-entry">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No entry signals added
+                  yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-entry','entry')">
+              <span class="plus">+</span> Add Entry Signal
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-entry')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+
+        <!-- Trend Filter -->
+        <div class="rules-box" id="trend-filter-box">
+          <div class="rules-signal-label">
+            Trend Filter (Optional): <span class="help-icon"
+              title="Filter to only trade in the trend direction">?</span>
+          </div>
+          <div class="rules-order-row">
+            Close Orders on Trend Change <span class="help-icon"
+              title="Close open orders when trend indicator changes">?</span>
+            <label class="radio-opt"><input type="radio" name="trendclose" value="yes" /> Yes</label>
+            <label class="radio-opt"><input type="radio" name="trendclose" value="no" checked /> No</label>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>FILTER RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-trend">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No trend filter added
+                  yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-trend','trend')">
+              <span class="plus">+</span> Add Trend Filter
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-trend')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+
+        <!-- Exit Rules -->
+        <div class="rules-box" id="exit-rules-box">
+          <div class="rules-box-header">## Exit Rules (Optional) ##</div>
+          <div class="rules-signal-label red">
+            Exit Signals: <span class="help-icon" title="Indicators that trigger exit signals">?</span>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>EXIT RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-exit">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No exit signals added
+                  yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-exit','exit')">
+              <span class="plus">+</span> Add Exit Signal
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-exit')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 — Hedge Rules (for Hedging strategies) -->
+      <div class="card strategy-content hidden" id="step-hedge-rules-card">
+        <div class="step-title" id="step-hedge-rules-title">Step 4: Rules for Hedge Orders</div>
+
+        <!-- Hedge Entry Rules -->
+        <div class="rules-box">
+          <div class="rules-box-header">## Hedge Entry Rules ##</div>
+          <div class="rules-signal-label">
+            Entry Signals: <span class="help-icon" title="Indicators that trigger hedge entry signals">?</span>
+          </div>
+          <div class="rules-order-row">
+            Authorized Order Types <span class="help-icon"
+              title="Allow only Buy, only Sell, or both for hedge orders">?</span>
+            <label class="radio-opt"><input type="radio" name="hedgeordertype" value="all" checked /> All</label>
+            <label class="radio-opt"><input type="radio" name="hedgeordertype" value="buy" /> Buy</label>
+            <label class="radio-opt"><input type="radio" name="hedgeordertype" value="sell" /> Sell</label>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>BUY &amp; SELL RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-hedge-entry">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No hedge entry signals
+                  added yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-hedge-entry','entry')">
+              <span class="plus">+</span> Add Hedge Entry Signal
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-hedge-entry')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+
+        <!-- Hedge Trend Filter -->
+        <div class="rules-box">
+          <div class="rules-signal-label">
+            Hedge Trend Filter (Optional): <span class="help-icon"
+              title="Filter to only hedge in the trend direction">?</span>
+          </div>
+          <div class="rules-order-row">
+            Close Hedge Orders on Trend Change <span class="help-icon"
+              title="Close open hedge orders when trend indicator changes">?</span>
+            <label class="radio-opt"><input type="radio" name="hedgetrendclose" value="yes" /> Yes</label>
+            <label class="radio-opt"><input type="radio" name="hedgetrendclose" value="no" checked /> No</label>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>FILTER RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-hedge-trend">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No hedge trend filter
+                  added yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-hedge-trend','trend')">
+              <span class="plus">+</span> Add Hedge Trend Filter
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-hedge-trend')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+
+        <!-- Hedge Exit Rules -->
+        <div class="rules-box">
+          <div class="rules-box-header">## Hedge Exit Rules (Optional) ##</div>
+          <div class="rules-signal-label red">
+            Hedge Exit Signals: <span class="help-icon" title="Indicators that trigger hedge exit signals">?</span>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>INDICATOR</th>
+                <th>TIME FRAME</th>
+                <th>EXIT RULE</th>
+                <th>INPUT PARAMETERS</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-hedge-exit">
+              <tr data-empty="1">
+                <td colspan="6" style="text-align:center;color:#bbb;font-size:12px;padding:18px;">No hedge exit signals
+                  added yet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rules-btn-group">
+            <button class="btn-add" onclick="addRule('tbody-hedge-exit','exit')">
+              <span class="plus">+</span> Add Hedge Exit Signal
+            </button>
+            <button class="btn-add candle-btn" onclick="openCandleModal('tbody-hedge-exit')">
+              <span class="plus">+</span> Add Candlestick Pattern
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5 — Other Settings (visible for Simple strategy only) -->
+      <div class="card strategy-content" id="step-other-settings-card">
+        <div class="step-title" id="step-other-settings-title">Step 4: Other Settings</div>
+        <div class="form-section">
+          <div class="form-row">
+            <span class="form-label">Trading Mode <span class="help-icon"
+                title="Automatic or Manual mode">?</span></span>
+            <div class="radio-group">
+              <label class="radio-opt"><input type="radio" name="tradingmode" value="auto" checked /> AUTOMATIC</label>
+              <label class="radio-opt"><input type="radio" name="tradingmode" value="manual" /> MANUAL</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <span class="form-label">Mobile Alert</span>
+            <label class="checkbox-opt"><input type="checkbox" /></label>
+          </div>
+          <div class="form-row">
+            <span class="form-label">Email Alert</span>
+            <label class="checkbox-opt"><input type="checkbox" /></label>
+          </div>
+          <div class="form-row">
+            <span class="form-label">Sound Alert</span>
+            <label class="checkbox-opt"><input type="checkbox" /></label>
+          </div>
+          <div class="form-row">
+            <span class="form-label">Trading Hours <span class="help-icon" title="Allowed trading hours">?</span></span>
+            <input type="text" class="form-control sm" placeholder="From" />
+            <span style="font-size:12px;color:#666;font-weight:600;padding:0 4px;">TO</span>
+            <input type="text" class="form-control sm" placeholder="To" />
+            <span style="font-size:11px;color:#aaa;font-style:italic;margin-left:6px;">This line is not required.</span>
+          </div>
+          <div class="form-row">
+            <span class="form-label">Trading Days <span class="help-icon" title="Allowed trading days">?</span></span>
+            <select class="form-control mid">
+              <option value=""></option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+            </select>
+            <span style="font-size:12px;color:#666;font-weight:600;padding:0 4px;">TO</span>
+            <select class="form-control mid">
+              <option value=""></option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+            </select>
+            <span style="font-size:11px;color:#aaa;font-style:italic;margin-left:6px;">This line is not required.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Name -->
+      <div class="card">
+        <div class="bot-name-row">
+          <span class="form-label" style="font-weight:600;font-size:13px;color:#333;min-width:130px;">Strategy
+            Name:</span>
+          <input type="text" class="form-control" style="width:300px;" placeholder="Enter a name for your Strategy"
+            id="bot-name" />
+        </div>
+      </div>
+
+      <!-- BUILD BUTTON -->
+      <div style="text-align:center;">
+        <button class="btn-build" onclick="buildBot()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+          </svg>
+          Build the Strategy
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      Automate trading system &nbsp;|&nbsp; Automated trading bot for Crypto, Stock &amp; Forex<br />
+      Find the best automated trading system for swing trading, day trading &amp; scalping
+    </div>
+    <div style="margin-top:8px;">
+      Copyright 2026 - v3.7 &nbsp;|&nbsp;
+      <a href="#">About Us</a>
+      <a href="#">Legal Notice</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact Us</a>
+    </div>
+  </footer>
+
+  <!-- CANDLESTICK MODAL -->
+  <div class="modal-backdrop" id="candle-modal">
+    <div class="modal-box">
+      <div class="modal-title">Select Candlestick Pattern</div>
+
+      <div class="candle-modal-content">
+        <div class="pattern-list-col">
+          <div class="pattern-tabs">
+            <button class="candle-tab-btn active" onclick="filterCandleCategory('all')">All</button>
+            <button class="candle-tab-btn" onclick="filterCandleCategory('single')">Single</button>
+            <button class="candle-tab-btn" onclick="filterCandleCategory('double')">Double</button>
+            <button class="candle-tab-btn" onclick="filterCandleCategory('triple')">Triple</button>
+          </div>
+          <div id="candle-pattern-list">
+            <!-- Patterns will be injected here -->
+          </div>
+        </div>
+
+        <div class="details-col" id="candle-pattern-details">
+          <div class="visual-preview" id="candle-visual-preview">
+            <!-- SVG will be injected here -->
+          </div>
+          <h2 id="candle-detail-name" style="margin-bottom: 12px; color: #2d2d3a; font-size: 18px;">Select a pattern</h2>
+          <div style="display: flex; gap: 8px; margin-bottom: 16px; justify-content: center;">
+            <div id="candle-detail-category" class="pattern-type"
+              style="background: #eee; padding: 2px 8px; border-radius: 4px; color: #666;"></div>
+            <div id="candle-detail-type" class="pattern-type"></div>
+          </div>
+          <p id="candle-detail-desc" class="pattern-description">
+            Click on a pattern from the left to see its visual representation and description.
+          </p>
+
+          <div class="candle-config-row">
+            <div style="text-align: left;">
+              <span class="form-label" style="min-width: auto; font-size: 11px;">CONFIRMATION</span>
+              <select class="form-control" id="candle-conf" style="width: 160px;">
+                <option>Immediate</option>
+                <option selected>Next Candle Close</option>
+                <option>2 Candle Confirmation</option>
+              </select>
+            </div>
+            <div style="text-align: left;">
+              <span class="form-label" style="min-width: auto; font-size: 11px;">MIN. BODY (PIPS)</span>
+              <input type="number" class="form-control" id="candle-size" value="10" style="width: 80px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="candle-footer">
+        <button class="btn-cancel" onclick="closeCandleModal()">Cancel</button>
+        <button class="btn-confirm" onclick="confirmAddCandleRule()">Integrate Pattern</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD RULE MODAL -->
+  <div class="modal-backdrop" id="rule-modal">
+    <div class="modal-box large">
+      <div class="modal-title" id="modal-title">Add Entry Signal</div>
+      <div class="modal-body">
+        <div class="panel-grid">
+
+          <div class="left-col">
+            <div class="form-row">
+              <span class="form-label" style="min-width:110px;">Indicator</span>
+              <select class="form-control" id="modal-indicator" style="flex:1;" onchange="syncModalIndicator()">
+                <option value="" disabled selected>— Select Indicator —</option>
+                <option value="ac">Accelerator Oscillator (AC)</option>
+                <option value="adx">ADX (Average Directional Index)</option>
+                <option value="alligator">Alligator</option>
+                <option value="atr">ATR (Average True Range)</option>
+                <option value="ao">Awesome Oscillator (AO)</option>
+                <option value="bb">Bollinger Bands</option>
+                <option value="cci">CCI (Commodity Channel Index)</option>
+                <option value="demarker">DeMarker</option>
+                <option value="donchian">Donchian Channel</option>
+                <option value="envelopes">Envelopes</option>
+                <option value="fractals">Fractals</option>
+                <option value="heiken">Heiken Ashi</option>
+                <option value="hma">Hull Moving Average (HMA)</option>
+                <option value="ichimoku">Ichimoku Kinko Hyo</option>
+                <option value="linreg">Linear Regression</option>
+                <option value="macd">MACD (Moving Average Convergence Divergence)</option>
+                <option value="momentum">Momentum</option>
+                <option value="mfi">Money Flow Index (MFI)</option>
+                <option value="ma">Moving Average</option>
+                <option value="osma">OsMA (Moving Average of Oscillator)</option>
+                <option value="sar">Parabolic SAR</option>
+                <option value="pivot">Pivot Points</option>
+                <option value="renko">Renko Charts (Virtual)</option>
+                <option value="rsi">RSI (Relative Strength Index)</option>
+                <option value="stoch">Stochastic Oscillator</option>
+                <option value="supertrend">SuperTrend</option>
+                <option value="supportresistance">Support and Resistance</option>
+                <option value="volume">Volume</option>
+                <option value="volprofile">Volume Profile</option>
+                <option value="wpr">Williams %R</option>
+                <option value="zigzag">ZigZag</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <span class="form-label" style="min-width:110px;">Time Frame</span>
+              <select class="form-control" id="modal-tf" style="flex:1;">
+                <option selected>Current</option>
+                <option>M1</option>
+                <option>M5</option>
+                <option>M15</option>
+                <option>M30</option>
+                <option>H1</option>
+                <option>H4</option>
+                <option>D1</option>
+                <option>W1</option>
+                <option>MN</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <span class="form-label" style="min-width:110px;" id="modal-rule-label">Condition Rule</span>
+              <select class="form-control" id="modal-rule" style="flex:1;">
+                <option value="" disabled selected>— Select Rule —</option>
+              </select>
+            </div>
+
+            <div id="modal-dynamic-params"
+              style="display:none; flex-direction:column; gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid #eee;">
+            </div>
+          </div>
+
+          <div class="right-col">
+            <div class="preview-area">
+              <img id="modal-preview-img" src="" alt="" style="display:none;" />
+              <div class="preview-desc" id="modal-preview-text">
+                Select an indicator to see the configuration preview.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-confirm" onclick="confirmAddRule()">Add Rule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS TOAST -->
+  <div class="toast" id="toast">✅ Strategy built successfully! Check "My Strategy" to manage it.</div>
+
+  <!-- STEP 2 HELP MODAL -->
+  <div id="tm2-help-modal" onclick="if(event.target===this)closeTM2Help()">
+    <div class="tm2-modal-box">
+      <button class="tm2-modal-close" onclick="closeTM2Help()">&times;</button>
+      <h4 id="tm2-help-title"></h4>
+      <p id="tm2-help-body"></p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       JS MODULES — Load order matters! Each file depends on
+       the ones above it. See each file header for details.
+       ═══════════════════════════════════════════════════════ -->
+  <!-- 1. Global state + shared HTML builder helpers (h, radio, select, etc.) -->
+  <script src="assets/js/state.js"></script>
+  <!-- 2. SVG diagrams + recovery zone HTML builder -->
+  <script src="assets/js/diagrams.js"></script>
+  <!-- 3. Strategy step templates (tplSimple, tplGrid*, tplHedging*, etc.) -->
+  <script src="assets/js/templates.js"></script>
+  <!-- 4. UI controls: toggles, render engine, strategy switchers, help modal -->
+  <script src="assets/js/ui-controls.js"></script>
+  <!-- 5. Rule modal, indicators dictionary, bot builder & DOMContentLoaded init -->
+  <script src="assets/js/rules-builder.js"></script>
+
+</body>
+
+</html>
